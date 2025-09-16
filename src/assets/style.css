@@ -1,0 +1,423 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap');
+
+:root {
+  /* 主色：番茄紅 + 霓虹青藍做漸層配色 */
+  --primary: #b94367;
+  --primary-2: #22d3ee;
+
+  /* 文字與輔助顏色 */
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+
+  /* 玻璃擬物背景與邊框 */
+  --glass: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(148, 163, 184, 0.25);
+
+  /* 背景漸層與外框投影 */
+  --bg-1: #0b1220;
+  --bg-2: #101826;
+}
+
+/* 頁面骨架 */
+html, body, #app {
+  height: 100%;
+}
+body {
+  margin: 0;
+  color: var(--text);
+  background: radial-gradient(1200px 600px at 20% -10%, rgba(34, 211, 238, 0.15), transparent 40%),
+              radial-gradient(1200px 600px at 120% 120%, rgba(239, 68, 68, 0.14), transparent 40%),
+              linear-gradient(180deg, var(--bg-1), var(--bg-2));
+}
+
+.app-shell {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 26px;
+}
+
+.glass-card {
+  width: min(1100px, 96vw);
+  padding: 22px;
+  border-radius: 22px;
+  border: 1px solid var(--glass-border);
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+  box-shadow: 0 15px 40px rgba(0,0,0,0.35), inset 0 0 60px rgba(255,255,255,0.03);
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.brand{
+  color: #e2e8f0;
+
+  & .dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, var(--primary), var(--primary-2));
+      box-shadow: 0 0 20px var(--primary);
+  }
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* 英文標籤亮色系 */
+label { color: #cbd5e1; }
+span.chip {
+  color: #0b1020;
+  background: rgba(255,255,255,0.8);
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+@media (min-width: 880px) {
+  .row {
+    grid-template-columns: 280px 1fr;
+  }
+}
+
+.panel {
+  padding: 16px;
+  border-radius: 18px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+/* 霓虹呼吸光 for buttons */
+@keyframes breathe {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 rgba(0, 0, 0, 0),
+      0 0 0 rgba(0, 0, 0, 0);
+  }
+  50% {
+    box-shadow:
+      0 10px 30px rgba(124, 58, 237, 0.35),
+      inset 0 0 24px rgba(34, 211, 238, 0.18);
+  }
+}
+.btn {
+  appearance: none;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 14px;
+  color: #0b1020;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--primary-2), var(--primary));
+  transition:
+    transform 0.18s ease,
+    filter 0.18s ease;
+  will-change: transform;
+}
+.btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  filter: brightness(1.06);
+}
+.btn:active {
+  transform: translateY(0) scale(0.98);
+}
+.btn.glow {
+  animation: breathe 2.8s ease-in-out infinite;
+}
+.btn.secondary {
+  background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+}
+.btn.ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--glass-border);
+}
+
+/* 控制列額外樣式 */
+.btn.icon {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: transparent; /* 移除奇怪背景 */
+  border: 1px solid rgba(203, 213, 225, 0.35); /* 細灰線 */
+  color: #cbd5e1;
+  animation: none; /* 移除呼吸動畫 */
+}
+.btn.icon:hover {
+  filter: none;
+  transform: none;
+  border-color: rgba(203, 213, 225, 0.55);
+}
+.btn.icon:active {
+  transform: translateY(1px);
+}
+.btn.icon.play::before {
+  content: '▶';
+}
+.btn.icon.pause::before {
+  content: '⏸';
+}
+.btn.icon.reset::before {
+  content: '↺';
+}
+
+/* Vue Transition 基礎 */
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateY(6px);
+}
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: 0.28s ease;
+}
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+/* TimerDial 專屬 */
+.timer-wrap {
+  display: grid;
+  place-items: center;
+}
+.timer-circle {
+  width: min(380px, 80vw);
+  aspect-ratio: 1/1;
+  position: relative;
+}
+.timer-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side, rgba(255, 255, 255, 0.08) 75%, transparent 76%),
+    conic-gradient(var(--primary) var(--deg, 0deg), rgba(255, 255, 255, 0.08) 0deg);
+  mask: radial-gradient(circle at center, transparent 58%, black 59%);
+  transition: filter 0.2s ease;
+}
+.timer-ring::after {
+  content: '';
+  position: absolute;
+  inset: 10px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+}
+.timer-core {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+  border: 1px solid var(--glass-border);
+}
+.time {
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji';
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(44px, 7vw, 76px); /* 再大一點 */
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  line-height: 1; /* 垂直置中更穩定 */
+  color: #cbd5e1; /* 稍微灰一些，對比柔和 */
+}
+.mode {
+  color: #a6b3c3;
+  margin-top: 8px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+.tabbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tab {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: #cbd5e1;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+.tab.active {
+  background: linear-gradient(45deg, var(--primary), var(--primary-2));
+  border-color: rgba(124, 58, 237, 0.55);
+  transform: translateY(-1px);
+}
+.tab::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: 0;
+  height: 2px; width: 0;
+  background: linear-gradient(90deg, var(--primary), var(--primary-2));
+  transition: width .25s ease;
+}
+.tab:hover::after { width: 100%; }
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.row-split {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+.input {
+  width: 96px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+}
+
+/* 數字輸入優化（隱藏原生箭頭） */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 讓 checkbox 看起來像 iOS 圓角開關 */
+.switch input[type='checkbox'] {
+  -webkit-appearance: none; /* safari */
+  appearance: none; /* standard */
+  width: 44px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  position: relative;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.switch input[type='checkbox']::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+.switch input[type='checkbox']:checked {
+  background: linear-gradient(135deg, var(--primary-2), var(--primary));
+  border-color: rgba(124, 58, 237, 0.6);
+}
+.switch input[type='checkbox']:checked::after {
+  transform: translateX(20px);
+}
+
+/* 滑桿（range）樣式，若之後有使用可直接套用 */
+input[type='range'] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  outline: none;
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-2), var(--primary));
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 6px 12px rgba(239, 68, 68, 0.25);
+  cursor: pointer;
+}
+input[type='range']::-moz-range-thumb {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-2), var(--primary));
+  border: 1px solid var(--glass-border);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.15), rgba(124, 58, 237, 0.15));
+  border: 1px solid var(--glass-border);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* 設定齒輪按鈕 */
+.icon-gear {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, filter 0.2s ease;
+}
+.icon-gear::before {
+  content: '⚙';
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #94a3b8; /* 暗色 */
+  font-size: 18px;
+}
+.icon-gear:hover {
+  transform: scale(1.06);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(148, 163, 184, 0.5);
+}
+.icon-gear:hover::before {
+  color: #cbd5e1; /* 變亮 */
+}
