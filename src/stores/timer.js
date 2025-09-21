@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { useSettings } from './settings'
+import mp3AudioManager from '../utils/mp3Audio'
 
 const MODES = { FOCUS: 'focus', SHORT: 'short', LONG: 'long' }
 
@@ -30,6 +31,12 @@ export const useTimer = defineStore('timer', {
       const remainMs = Math.max(0, this.endAt - now)
       this.remaining = Math.ceil(remainMs / 1000)
       this.progress = 1 - remainMs / (this.totalSeconds * 1000)
+
+      // 播放倒數滴答聲（剩餘10秒時）
+      const settings = useSettings()
+      if (settings.sound && this.remaining <= 10 && this.remaining > 0) {
+        mp3AudioManager.startTickSound(this.remaining)
+      }
 
       if (remainMs <= 0) {
         this.complete()
@@ -76,11 +83,10 @@ export const useTimer = defineStore('timer', {
         this.mode = MODES.FOCUS
       }
 
-      // 音效提示
+      // 播放完成音效
       const s = useSettings()
       if (s.sound) {
-        const a = new Audio('/ding.mp3')
-        a.play().catch(() => {})
+        mp3AudioManager.playCompleteSound()
       }
 
       // 自動開始下一段
