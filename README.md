@@ -1,4 +1,4 @@
-# Pomodoro Studio（番茄鐘）
+# 🍅Pomodoro Studio（番茄鐘）
 
 以 Vue 3 + Vite + Pinia 打造的番茄鐘網頁版，具備專注/短休/長休模式、倒數最後 10 秒滴答聲、開始/暫停/完成音效、自動開始下一段等功能。
 
